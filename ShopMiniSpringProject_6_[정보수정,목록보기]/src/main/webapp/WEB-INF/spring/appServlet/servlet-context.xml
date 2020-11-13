@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+    <mvc:annotation-driven />
+    <mvc:default-servlet-handler/>
+  
+    <mvc:view-controller path="/" view-name="main"/>
+    <mvc:view-controller path="/memberForm" view-name="memberForm"/>	<!-- memberForm.jsp -->
+    <mvc:view-controller path="/loginForm" view-name="loginForm"/><!-- loginForm.jsp -->
+    <mvc:view-controller path="/myPage" view-name="mypage"/>
+    
+    <!-- 인터셉터 등록 -->
+    <mvc:interceptors>
+    	<mvc:interceptor>
+    		<mvc:mapping path="/loginCheck/**"/>
+    		<ref bean="loginCheckInterceptor"/>
+    	</mvc:interceptor>
+    </mvc:interceptors>
+    <bean id="loginCheckInterceptor" class="com.interceptor.LoginCheckInterceptor"/>
+    <!-- 인터셉터 등록 끝 -->
+    
+    <bean 
+    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+     <property name="prefix" value="/WEB-INF/views/" />
+     <property name="suffix" value=".jsp" />
+    </bean>
+    
+    <context:component-scan base-package="com.*" />
+    <!-- Controller, Service, Respository 자동 생성 등록 -->
+    
+	<!-- 리소스 등록 -->
+	<mvc:resources location="/WEB-INF/views/images/" mapping="/images/**"/>
+	<mvc:resources location="/WEB-INF/views/css/" mapping="/css/**"/>
+	<mvc:resources location="/WEB-INF/views/js/" mapping="/js/**"/>
+</beans>
